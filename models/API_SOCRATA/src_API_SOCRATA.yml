@@ -1,0 +1,216 @@
+version: 2
+
+sources:
+
+  - name: BUILDING_ENERGY_BENCHMARKING # name of the source
+    description: "Raw data from an API"
+    schema: API_SOCRATA # schema where the raw data are
+    database: "BRONZE_DB" # name of the database
+
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+
+    tables:
+
+      - name: building_energy_benchmarking
+        description: "Table that track the anual energy performance of the City of Seattle"
+        columns:
+          - name: osebuildingid
+            data_type: text
+            description: "Unique identifier for each building"
+            tests:
+              - not_null
+          - name: datayear
+            data_type: text
+            description: "Year of the data"
+            tests:
+              - not_null
+          - name: buildingname
+            data_type: text
+            description: "Name of the building"
+            tests:
+              - not_null
+          - name: buildingtype
+            data_type: text
+            description: "Type of the building"
+          - name: taxparcelidentificationnumber
+            data_type: text
+            description: "Tax parcel identification number"
+          - name: address
+            data_type: text
+            description: "Address of the building"
+          - name: city
+            data_type: text
+            description: "City where the building is located"
+          - name: state
+            data_type: text
+            description: "State where the building is located"
+          - name: zipcode
+            data_type: number
+            description: "Zip code of the building location"
+            tests:
+              - positive_values
+          - name: latitude
+            data_type: number
+            description: "Latitude of the building location"
+          - name: longitude
+            data_type: number
+            description: "Longitude of the building location"
+          - name: neighborhood
+            data_type: text
+            description: "Neighborhood where the building is located"
+          - name: councillistrictcode
+            data_type: text
+            description: "Council district code"
+          - name: yearbuilt
+            data_type: text
+            description: "Year the building was built"
+            tests:
+              - positive_values
+          - name: numberoffloors
+            data_type: number
+            description: "Number of floors in the building"
+            tests:
+              - positive_values
+          - name: numberofbuildings
+            data_type: number
+            description: "Number of buildings in the property"
+            tests:
+              - positive_values
+          - name: propertygfatotal
+            data_type: number
+            description: "Total gross floor area of the property"
+            tests:
+              - positive_values
+          - name: propertygfabuilding
+            data_type: number
+            description: "Gross floor area of the building(s)"
+            tests:
+              - positive_values
+          - name: propertygfaparking
+            data_type: number
+            description: "Gross floor area of parking"
+            tests:
+              - positive_values
+          - name: energystarscore
+            data_type: number
+            description: "ENERGY STAR score of the building"
+          - name: siteeuiwn
+            data_type: number
+            description: "Site EUI WN in kBtu/sf"
+            tests:
+              - positive_values
+          - name: siteeui
+            data_type: number
+            description: "Site EUI in kBtu/sf"
+            tests:
+              - positive_values
+          - name: siteenergyuse
+            data_type: number
+            description: "Site energy use in kBtu"
+            tests:
+              - positive_values
+          - name: siteenergyusewn
+            data_type: number
+            description: "Site energy use WN in kBtu"
+            tests:
+              - positive_values
+          - name: sourceeuiwn
+            data_type: number
+            description: "Source EUI WN in kBtu/sf"
+            tests:
+              - positive_values
+          - name: sourceeui
+            data_type: number
+            description: "Source EUI in kBtu/sf"
+            tests:
+              - positive_values
+          - name: epapropertytype
+            data_type: text
+            description: "EPA property type"
+          - name: largestpropertyusetype
+            data_type: text
+            description: "Largest property use type"
+          - name: largestpropertyusetypegfa
+            data_type: number
+            description: "Gross floor area of the largest property use type"
+            tests:
+              - positive_values
+          - name: secondlargestpropertyusetype
+            data_type: text
+            description: "Second largest property use type"
+          - name: secondlargestpropertyusetypegfa
+            data_type: number
+            description: "Gross floor area of the second largest property use type"
+            tests:
+              - positive_values
+          - name: thirdlargestpropertyusetype
+            data_type: text
+            description: "Third largest property use type"
+          - name: thirdlargestpropertyusetypegfa
+            data_type: number
+            description: "Gross floor area of the third largest property use type"
+            tests:
+              - positive_values
+          - name: electricity
+            data_type: number
+            description: "Electricity consumption in kWh"
+            tests:
+              - positive_values
+          - name: steamuse
+            data_type: number
+            description: "Steam use in kBtu"
+            tests:
+              - positive_values
+          - name: naturalgas
+            data_type: number
+            description: "Natural gas consumption in therms"
+            tests:
+              - positive_values
+          - name: compliancestatus
+            data_type: text
+            description: "Compliance status"
+          - name: complianceissue
+            data_type: text
+            description: "Compliance issue"
+          - name: electricity_kbtu
+            data_type: number
+            description: "Electricity consumption in kBtu"
+            tests:
+              - positive_values
+          - name: naturalgas_kbtu
+            data_type: number
+            description: "Natural gas consumption in kBtu"
+            tests:
+              - positive_values
+          - name: totalghgemissions
+            data_type: number
+            description: "Total GHG emissions"
+            tests:
+              - positive_values
+          - name: ghgemissionsintensity
+            data_type: number
+            description: "GHG emissions intensity"
+            tests:
+              - positive_values
+          - name: primarypropertytype
+            data_type: text
+            description: "Primary property type"
+          - name: propertyname
+            data_type: text
+            description: "Property name"
+          - name: listofallpropertyusetypes
+            data_type: text
+            description: "List of all property use types"
+          - name: defaultdata
+            data_type: text
+            description: "Default data"
+          - name: yearsenergystarcertified
+            data_type: text
+            description: "Years ENERGY STAR certified"
+          - name: outlier
+            data_type: text
+
+
