@@ -84,7 +84,7 @@ sources:
             description: "Total gross floor area of the property"
             tests:
               - positive_values
-          - name: propertygfabuilding
+          - name: propertygfabuilding_s
             data_type: number
             description: "Gross floor area of the building(s)"
             tests:
@@ -97,32 +97,32 @@ sources:
           - name: energystarscore
             data_type: number
             description: "ENERGY STAR score of the building"
-          - name: siteeuiwn
+          - name: siteeuiwn_kbtu_sf
             data_type: number
             description: "Site EUI WN in kBtu/sf"
             tests:
               - positive_values
-          - name: siteeui
+          - name: siteeui_kbtu_sf
             data_type: number
             description: "Site EUI in kBtu/sf"
             tests:
               - positive_values
-          - name: siteenergyuse
+          - name: siteenergyuse_kbtu
             data_type: number
             description: "Site energy use in kBtu"
             tests:
               - positive_values
-          - name: siteenergyusewn
+          - name: siteenergyusewn_kbtu
             data_type: number
             description: "Site energy use WN in kBtu"
             tests:
               - positive_values
-          - name: sourceeuiwn
+          - name: sourceeuiwn_kbtu_sf
             data_type: number
             description: "Source EUI WN in kBtu/sf"
             tests:
               - positive_values
-          - name: sourceeui
+          - name: sourceeui_kbtu_sf
             data_type: number
             description: "Source EUI in kBtu/sf"
             tests:
@@ -212,5 +212,15 @@ sources:
             description: "Years ENERGY STAR certified"
           - name: outlier
             data_type: text
+            description: "Outlier"
+          - name: otherfueluse_kbtu
+            data_type: text
+            description: "Other fuel use in kBtu"
+          - name: comment
+            data_type: text
+            description: "Comments"
+          - name: location
+            data_type: text
+            description: "Location"
 
 
