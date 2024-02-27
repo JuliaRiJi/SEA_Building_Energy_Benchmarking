@@ -21,4 +21,4 @@ stg_energy_use_intensity as (
     from energy_sources
 )
 
-select * from stg_energy_use_intensity;
+select * from stg_energy_use_intensity
