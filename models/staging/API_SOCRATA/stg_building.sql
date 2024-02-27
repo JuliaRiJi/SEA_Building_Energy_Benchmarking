@@ -14,14 +14,18 @@
 
 with src_building as (
     select
-        , osebuildingid
+          osebuildingid::varchar(100) as ose_building_id
         , buildingname::varchar(100) as building_name
         , propertygfabuilding_s::float as property_gfa_buildings
         , numberoffloors::int as number_of_floors
         , yearbuilt::date as year_built
-        , totalghemissions::float as total_gh_emissions
-        , ghemissionsintensity::float as gh_emissions_intensity
-        , energystarscore::int as energy_star_score
+        , totalghgemissions::float as total_ghg_emissions
+        , ghgemissionsintensity::float as ghg_emissions_intensity
+        , case 
+            when energystarscore = 'NA' then null 
+            when try_to_number(energystarscore) is null then null 
+            else energystarscore::int
+          end as energy_star_score
         , siteenergyuse_kbtu::float as site_energy_use_kbtu
         , siteenergyusewn_kbtu::float as site_energy_use_wn_kbtu
         , compliancestatus::varchar(100) as compliance_status
@@ -29,7 +33,7 @@ with src_building as (
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
     ),
 
-with stg_building as (
+stg_building as (
     select
           {{ dbt_utils.generate_surrogate_key(['ose_building_id']) }} as id_building
         , ose_building_id
@@ -37,8 +41,8 @@ with stg_building as (
         , property_gfa_buildings
         , number_of_floors
         , year_built
-        , total_gh_emissions
-        , gh_emissions_intensity
+        , total_ghg_emissions
+        , ghg_emissions_intensity
         , energy_star_score
         , site_energy_use_kbtu
         , site_energy_use_wn_kbtu
@@ -48,3 +52,4 @@ with stg_building as (
 )
 
 select * from stg_building
+

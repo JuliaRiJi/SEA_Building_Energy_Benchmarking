@@ -12,8 +12,10 @@
 }}
 
 with energy_types as (
-    select 'electricity' as energy_type union all
-    select 'steam' union all
+    select 'electricity' as energy_type 
+    union all
+    select 'steam' 
+    union all
     select 'natural_gas'
 ),
 
