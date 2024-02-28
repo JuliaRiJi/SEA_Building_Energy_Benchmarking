@@ -31,7 +31,7 @@ with dim_property as (
         , pur3.property_use_type_gfa as third_property_use_gfa
         , pur3.id_property_use_type as id_third_property_use
     from {{ ref('stg_property') }} p
-    join {{ ref('stg_property_use_type') }} put
+    left join {{ ref('stg_property_use_type') }} put
     on p.epa_property_type = put.property_use_type
     left join {{ ref('stg_property_use_ranking') }} pur1
     on p.id_property = pur1.id_property and pur1.property_use_ranking = 1
@@ -42,4 +42,3 @@ with dim_property as (
 )
 
 select * from dim_property
-

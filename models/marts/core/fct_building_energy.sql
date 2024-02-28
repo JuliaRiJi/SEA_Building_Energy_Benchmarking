@@ -40,7 +40,7 @@ with fct_building_energy as (
     from {{ ref('stg_building') }} b
     left join {{ ref('int_building_energy_intensity') }} bei
     on b.id_building = bei.id_building and b.id_data_year = bei.id_data_year
-    left join {{ ref('int_building_energy_intensity') }} bet
+    left join {{ ref('int_building_energy_type') }} bet
     on b.id_building = bet.id_building and b.id_data_year = bet.id_data_year
 )
 
