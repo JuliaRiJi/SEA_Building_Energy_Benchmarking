@@ -49,7 +49,6 @@ stg_building as (
           {{ dbt_utils.generate_surrogate_key(['ose_building_id']) }} as id_building
         , ose_building_id
         ,  {{ dbt_utils.generate_surrogate_key(['id_property']) }} as id_property
-        , tax_parcel_identification_number
         , case 
             when address is not null and zipcode is not null 
             then {{ dbt_utils.generate_surrogate_key(['address', 'zipcode']) }} 
