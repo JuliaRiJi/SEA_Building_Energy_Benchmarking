@@ -40,8 +40,8 @@ stg_location as (
     select
         case 
             when address is not null and zipcode is not null 
-            then {{ dbt_utils.generate_surrogate_key(['address', 'zipcode']) }} 
-            else null 
+            then null
+            else {{ dbt_utils.generate_surrogate_key(['address', 'zipcode']) }} 
         end as id_location,
         address,
         city,

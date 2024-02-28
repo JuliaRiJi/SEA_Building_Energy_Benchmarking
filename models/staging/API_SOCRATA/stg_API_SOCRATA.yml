@@ -1,0 +1,368 @@
+version: 2
+
+models:
+  - name: stg_building
+    description: "stg_building table description"
+    columns:
+        - name: id_building
+          data_type: text
+          description: "Unique identifier for each building"
+          tests:
+            - not_null
+            - dbt_utils.not_empty_string
+            - unique
+        - name: ose_building_id
+          data_type: text
+          tests:
+              - dbt_utils.not_empty_string
+        - name: id_property
+          data_type: text
+          description: "Unique identifier for property"
+          tests:
+            - dbt_utils.not_empty_string
+        - name: tax_parcel_identification_number
+          data_type: text
+          description: "Tax parcel identification number"
+          tests:
+              - dbt_utils.not_empty_string
+        - name: id_location
+          data_type: text
+          description: "Unique identifier for location"
+          tests:
+              - dbt_utils.not_empty_string
+        - name: building_name
+          data_type: text
+          description: "Name of the building"
+          tests:
+              - dbt_utils.not_empty_string
+        - name: id_building_type
+          data_type: text
+          tests:
+              - dbt_utils.not_empty_string
+        - name: property_gfa_buildings
+          data_type: numeric
+          description: "Property GFA (Gross Floor Area) for buildings"
+        - name: number_of_floors
+          data_type: numeric
+          description: "Number of floors"
+        - name: year_built
+          data_type: date
+          description: "Year the building was built"
+        - name: total_ghg_emissions
+          data_type: numeric
+          description: "Total greenhouse gas emissions"
+        - name: ghg_emissions_intensity
+          data_type: numeric
+          description: "Greenhouse gas emissions intensity"
+        - name: energy_star_score
+          data_type: numeric
+          description: "Energy star score"
+        - name: site_energy_use_kbtu
+          data_type: numeric
+          description: "Site energy use in kBTU"
+          tests:
+        - name: site_energy_use_wn_kbtu
+          data_type: numeric
+          description: "Site energy use in WN kBTU"
+          tests:
+        - name: compliance_status
+          data_type: text
+          description: "Compliance status"
+          tests:
+              - dbt_utils.not_empty_string
+        - name: compliance_issue
+          data_type: text
+          description: "Compliance issue"
+          tests:
+              - dbt_utils.not_empty_string
+
+  - name: stg_building_energy_intensity
+    description: "stg_building_energy_intensity table description"
+    columns:
+          - name: id_building
+            data_type: text
+            description: "Unique identifier for building"
+            tests:
+              - dbt_utils.not_empty_string
+              - unique
+          - name: id_energy_use_intensity
+            data_type: text
+            description: "Identifier for energy use intensity"
+            tests:
+              - dbt_utils.not_empty_string
+              - unique
+          - name: data_year
+            data_type: text
+            description: "Year of the data"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: kbtu_value
+            data_type: text
+            description: "KBTU value"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: kbtu_value_wn
+            data_type: text
+            description: "KBTU value in WN"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+
+  - name: stg_building_energy_type
+    description: "stg_building_energy_type table description"
+    columns:
+          - name: id_building
+            data_type: text
+            description: "Identifier for building"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+              - unique
+          - name: id_energy_type
+            data_type: text
+            description: "Identifier for energy type"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+              - unique
+          - name: data_year
+            data_type: text
+            description: "Year of the data"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: kbtu_value
+            data_type: text
+            description: "KBTU value"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+
+  - name: stg_building_type
+    description: "stg_building_type table description"
+    columns:
+          - name: id_building_type
+            data_type: text
+            description: "Identifier for building type"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+              - unique
+          - name: building_type
+            data_type: text
+            description: "Building type"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+
+  - name: stg_energy_type
+    description: "stg_energy_type table description"
+    columns:
+          - name: id_energy_type
+            data_type: text
+            description: "Identifier for energy type"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+              - unique
+          - name: energy_type
+            data_type: text
+            description: "Energy type"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+
+
+  - name: stg_energy_use_intensity
+    description: "STG_ENERGY_USE_INTENSITY table description"
+    columns:
+          - name: id_energy_use_intensity
+            data_type: text
+            description: "Identifier for energy use intensity"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+              - unique
+          - name: energy_source
+            data_type: text
+            description: "Energy source"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: energy_desc
+            data_type: text
+            description: "Energy description"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+
+  - name: stg_location
+    description: "STG_LOCATION table description"
+    columns:
+          - name: id_location
+            data_type: text
+            description: "Identifier for location"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+              - unique
+          - name: address
+            data_type: text
+            description: "Address"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: city
+            data_type: text
+            description: "City"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: state
+            data_type: text
+            description: "State"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: zipcode
+            data_type: numeric(38,0)
+            description: "Zipcode"
+            tests:
+              - not_null
+          - name: latitude
+            data_type: float
+            description: "Latitude"
+            tests:
+              - not_null
+          - name: longitude
+            data_type: float
+            description: "Longitude"
+            tests:
+              - not_null
+          - name: neighborhood
+            data_type: text
+            description: "Neighborhood"
+            tests:
+              - not_null
+          - name: council_district_code
+            data_type: numeric(38,0)
+            description: "Council district code"
+            tests:
+              - not_null
+
+  - name: stg_property
+    description: "stg_property table description"
+    columns:
+          - name: id_property
+            data_type: varchar(32)
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+              - unique
+          - name: tax_parcel_identification_number
+            data_type: text
+            description: "Tax parcel identification number"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: property_name
+            data_type: text
+            description: "Property name"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: epa_property_type
+            data_type: text
+            description: "EPA property type"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: primary_property_type
+            data_type: text
+            description: "Primary property type"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: epa_building_sub_type_name
+            data_type: text
+            description: "EPA building sub type name"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: number_of_buildings
+            data_type: numeric(38,0)
+            description: "Number of buildings"
+            tests:
+              - not_null
+          - name: property_gfa_total
+            data_type: numeric(38,0)
+            description: "Total property GFA (Gross Floor Area)"
+            tests:
+              - not_null
+          - name: property_gfa_parking
+            data_type: numeric(38,0)
+            description: "Property GFA for parking"
+            tests:
+              - not_null
+
+  - name: stg_property_use_ranking
+    description: "stg_property_use_ranking table description"
+    columns:
+          - name: data_year
+            data_type: text
+            description: "Year of the data"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: tax_parcel_identification_number
+            data_type: text
+            description: "Tax parcel identification number"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: id_property
+            data_type: varchar(32)
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: largest_property_use_type
+            data_type: text
+            description: "Largest property use type"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: id_property_use_type
+            data_type: varchar(32)
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+          - name: property_use_ranking
+            data_type: numeric(1,0)
+            description: "Property use ranking"
+            tests:
+              - not_null
+          - name: property_use_type_gfa
+            data_type: text
+            description: "Property use type GFA"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+
+  - name: stg_property_use_type
+    description: "stg_property_use_type table description"
+    columns:
+          - name: id_property_use_type
+            data_type: varchar(32)
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+              - unique
+          - name: property_use_type
+            data_type: text
+            description: "Property use type"
+            tests:
+              - not_null
+              - dbt_utils.not_empty_string
+
