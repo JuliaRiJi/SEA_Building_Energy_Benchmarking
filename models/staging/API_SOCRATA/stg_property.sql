@@ -13,11 +13,11 @@
 
 with src_property as (
     select
-        case
+          case
             when taxparcelidentificationnumber is null 
             then null
-            else {{ dbt_utils.generate_surrogate_key(['taxparcelidentificationnumber']) }}
-        end as id_property
+            else taxparcelidentificationnumber
+          end as id_property
         , taxparcelidentificationnumber::varchar(100) as tax_parcel_identification_number
         , datayear::date as data_year
         , case 
@@ -45,7 +45,7 @@ with src_property as (
 
 stg_property as (
     select
-        id_property,
+        {{ dbt_utils.generate_surrogate_key(['id_property']) }} as id_property,
         tax_parcel_identification_number,
         property_name::varchar(100) as property_name,
         epa_property_type::varchar(100) as epa_property_type,
