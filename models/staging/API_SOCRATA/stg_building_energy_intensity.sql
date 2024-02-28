@@ -1,3 +1,9 @@
+/*
+    Staging Model: stg_building_energy_intensity
+
+    This dbt model stages raw energy intensity usage of buildings in Seattle.
+*/
+
 {{
   config(
       materialized='table',
@@ -18,7 +24,7 @@ with site_energy_cte as (
 ),
 
 -- CTE for "source" energy
-with source_energy_cte as (
+source_energy_cte as (
     select
         {{ dbt_utils.generate_surrogate_key(['osebuildingid']) }} as id_building,
         'source' as energy_source,
@@ -35,7 +41,7 @@ stg_building_energy_intensity as (
         id_energy_use_intensity,
         data_year,
         kbtu_value,
-        kbtu_value_wn,
+        kbtu_value_wn
     from site_energy_cte
     
     union all
@@ -45,8 +51,8 @@ stg_building_energy_intensity as (
         id_energy_use_intensity,
         data_year,
         kbtu_value,
-        kbtu_value_wn,
-    from source_energy_wn_cte
+        kbtu_value_wn
+    from source_energy_cte
 )
 
 select * from stg_building_energy_intensity

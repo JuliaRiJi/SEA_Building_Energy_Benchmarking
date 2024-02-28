@@ -56,7 +56,7 @@ stg_building as (
             else null 
           end as id_location
         , building_name
-        , {{ dbt_utils.generate_surrogate_key(['buildingtype']) }} as id_building_type
+        , {{ dbt_utils.generate_surrogate_key(['building_type']) }} as id_building_type
         , property_gfa_buildings
         , number_of_floors
         , year_built

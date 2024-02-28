@@ -1,3 +1,9 @@
+/*
+    Staging Model: stg_energy_use_intensity
+
+    This dbt model stages raw energy usage intensity metrics.
+*/
+
 {{
   config(
       materialized='table'

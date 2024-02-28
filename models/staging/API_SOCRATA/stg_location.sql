@@ -1,3 +1,9 @@
+/*
+    Staging Model: stg_location
+
+    This dbt model stages raw location data of buildings in Seattle.
+*/
+
 {{
   config(
       materialized='table',
@@ -44,7 +50,7 @@ stg_location as (
         latitude,
         longitude,
         neighborhood,
-        councildistrictcode
+        council_district_code
     from (
         select distinct 
             address,
@@ -54,11 +60,9 @@ stg_location as (
             latitude,
             longitude,
             neighborhood,
-            councildistrictcode
+            council_district_code
         from src_location
     ) unique_locations
 )
-
-select * from stg_location
 
 select * from stg_location

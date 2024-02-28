@@ -1,3 +1,9 @@
+/*
+    Staging Model: stg_property_use_type
+
+    This dbt model stages raw data of property use types.
+*/
+
 {{
   config(
       materialized='table',

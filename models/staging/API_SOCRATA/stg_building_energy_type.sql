@@ -1,3 +1,9 @@
+/*
+    Staging Model: stg_building_energy_type
+
+    This dbt model stages raw energy type data used by buildings in Seattle.
+*/
+
 {{
   config(
       materialized='table'
@@ -11,7 +17,7 @@ with electricity_cte as (
         {{ dbt_utils.generate_surrogate_key(['osebuildingid']) }} as id_building
         , 'electricity' as energy_type
         , {{ dbt_utils.generate_surrogate_key(['energy_type']) }} as id_energy_type
-        , datayear as data_year,
+        , datayear as data_year
         , electricity_kbtu as kbtu_value
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
 ),
@@ -22,7 +28,7 @@ natural_gas_cte as (
         {{ dbt_utils.generate_surrogate_key(['osebuildingid']) }} as id_building
         , 'natural_gas' as energy_type
         , {{ dbt_utils.generate_surrogate_key(['energy_type']) }} as id_energy_type
-        , datayear as data_year,
+        , datayear as data_year
         , naturalgas_kbtu as kbtu_value
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
 ),
@@ -33,7 +39,7 @@ steam_cte as (
         {{ dbt_utils.generate_surrogate_key(['osebuildingid']) }} as id_building
         , 'steam' as energy_type
         , {{ dbt_utils.generate_surrogate_key(['energy_type']) }} as id_energy_type
-        , datayear as data_year,
+        , datayear as data_year
         , steamuse_kbtu as kbtu_value
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
 ),
