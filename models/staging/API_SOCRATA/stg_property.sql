@@ -37,6 +37,7 @@ with src_property as (
             else epa_building_sub_type_name 
           end as epa_building_sub_type_name
         , numberofbuildings::int as number_of_buildings
+        , propertygfabuilding_s::float as property_gfa_buildings
         , propertygfatotal::float as property_gfa_total
         , propertygfaparking::float as property_gfa_parking
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
@@ -51,6 +52,7 @@ stg_property as (
         primary_property_type::varchar(100) as primary_property_type,
         epa_building_sub_type_name::varchar(100) as epa_building_sub_type_name,
         number_of_buildings,
+        property_gfa_buildings,
         property_gfa_total,
         property_gfa_parking
     from src_property

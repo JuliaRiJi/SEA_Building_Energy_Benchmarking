@@ -23,7 +23,6 @@ with src_building as (
             when zipcode is null then null 
             else zipcode::int
           end as zipcode
-        , propertygfabuilding_s::float as property_gfa_buildings
         , numberoffloors::int as number_of_floors
         , yearbuilt::date as year_built
         , totalghgemissions::float as total_ghg_emissions
@@ -57,7 +56,6 @@ stg_building as (
           end as id_location
         , building_name
         , {{ dbt_utils.generate_surrogate_key(['building_type']) }} as id_building_type
-        , property_gfa_buildings
         , number_of_floors
         , year_built
         , total_ghg_emissions
