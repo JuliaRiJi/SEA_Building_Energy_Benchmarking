@@ -15,7 +15,18 @@
 with src_building as (
     select
           osebuildingid::varchar(100) as ose_building_id
+        , taxparcelidentificationnumber::varchar(100) as tax_parcel_identification_number
+        , datayear::date as data_year
         , buildingname::varchar(100) as building_name
+        , buildingtype::varchar(100) as building_type
+        , case 
+            when address is null or trim(address) = '' then null 
+            else address
+          end as address::varchar(100)
+        , case 
+            when zipcode is null then null 
+            else zipcode::int
+          end as zipcode
         , propertygfabuilding_s::float as property_gfa_buildings
         , numberoffloors::int as number_of_floors
         , yearbuilt::date as year_built
@@ -37,7 +48,11 @@ stg_building as (
     select
           {{ dbt_utils.generate_surrogate_key(['ose_building_id']) }} as id_building
         , ose_building_id
+        , {{ dbt_utils.generate_surrogate_key(['tax_parcel_identification_number']) }} as id_property
+        , tax_parcel_identification_number
+        , {{ dbt_utils.generate_surrogate_key(['address', 'zipcode']) }} as id_location
         , building_name
+        , {{ dbt_utils.generate_surrogate_key(['buildingtype']) }} as id_building_type
         , property_gfa_buildings
         , number_of_floors
         , year_built

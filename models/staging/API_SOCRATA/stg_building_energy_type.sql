@@ -11,6 +11,7 @@ with electricity_cte as (
         {{ dbt_utils.generate_surrogate_key(['osebuildingid']) }} as id_building
         , 'electricity' as energy_type
         , {{ dbt_utils.generate_surrogate_key(['energy_type']) }} as id_energy_type
+        , datayear as data_year,
         , electricity_kbtu as kbtu_value
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
 ),
@@ -21,6 +22,7 @@ natural_gas_cte as (
         {{ dbt_utils.generate_surrogate_key(['osebuildingid']) }} as id_building
         , 'natural_gas' as energy_type
         , {{ dbt_utils.generate_surrogate_key(['energy_type']) }} as id_energy_type
+        , datayear as data_year,
         , naturalgas_kbtu as kbtu_value
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
 ),
@@ -31,6 +33,7 @@ steam_cte as (
         {{ dbt_utils.generate_surrogate_key(['osebuildingid']) }} as id_building
         , 'steam' as energy_type
         , {{ dbt_utils.generate_surrogate_key(['energy_type']) }} as id_energy_type
+        , datayear as data_year,
         , steamuse_kbtu as kbtu_value
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
 ),
@@ -40,6 +43,7 @@ stg_building_energy_type as (
     select
         id_building,
         id_energy_type,
+        data_year,
         kbtu_value
     from electricity_cte
     
@@ -48,6 +52,7 @@ stg_building_energy_type as (
     select
         id_building,
         id_energy_type,
+        data_year,
         kbtu_value
     from natural_gas_cte
     
@@ -56,6 +61,7 @@ stg_building_energy_type as (
     select
         id_building,
         id_energy_type,
+        data_year,
         kbtu_value
     from steam_cte
 )
