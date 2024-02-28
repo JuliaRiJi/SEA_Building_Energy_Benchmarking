@@ -46,10 +46,10 @@ stg_property as (
     select
         id_property,
         tax_parcel_identification_number,
-        property_name::varchar(100),
-        epa_property_type::varchar(100),
-        primary_property_type::varchar(100),
-        epa_building_sub_type_name::varchar(100),
+        property_name::varchar(100) as property_name,
+        epa_property_type::varchar(100) as epa_property_type,
+        primary_property_type::varchar(100) as primary_property_type,
+        epa_building_sub_type_name::varchar(100) as epa_building_sub_type_name,
         number_of_buildings,
         property_gfa_total,
         property_gfa_parking

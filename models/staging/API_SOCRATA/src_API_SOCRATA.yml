@@ -7,11 +7,6 @@ sources:
     schema: api_socrata # schema where the raw data are
     database: "BRONZE_DB" # name of the database
 
-    quoting:
-      database: false
-      schema: false
-      identifier: false
-
     tables:
 
       - name: building_energy_benchmarking
