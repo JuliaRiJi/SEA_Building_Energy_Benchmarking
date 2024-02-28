@@ -8,7 +8,8 @@
 with src_property as (
     select
         , case
-            when taxparcelidentificationnumber is null then null
+            when taxparcelidentificationnumber is null 
+            then null
             else {{ dbt_utils.generate_surrogate_key(['taxparcelidentificationnumber']) }}
           end as id_property
         , taxparcelidentificationnumber::int as tax_parcel_identification_number

@@ -1,8 +1,7 @@
 /*
-    Staging Model: stg_building_energy_benchmarking
+    Staging Model: stg_building
 
-    This dbt model stages raw data ---------------------.
-
+    This dbt model stages raw energy data from the buildings in Seattle
 */
 
 {{
@@ -19,10 +18,7 @@ with src_building as (
         , datayear::date as data_year
         , buildingname::varchar(100) as building_name
         , buildingtype::varchar(100) as building_type
-        , case 
-            when address is null or trim(address) = '' then null 
-            else address
-          end as address::varchar(100)
+        , address::varchar(100) as address
         , case 
             when zipcode is null then null 
             else zipcode::int
@@ -48,9 +44,17 @@ stg_building as (
     select
           {{ dbt_utils.generate_surrogate_key(['ose_building_id']) }} as id_building
         , ose_building_id
-        , {{ dbt_utils.generate_surrogate_key(['tax_parcel_identification_number']) }} as id_property
+        , case 
+            when tax_parcel_identification_number is not null 
+            then {{ dbt_utils.generate_surrogate_key(['tax_parcel_identification_number']) }} 
+            else null 
+          end as id_property
         , tax_parcel_identification_number
-        , {{ dbt_utils.generate_surrogate_key(['address', 'zipcode']) }} as id_location
+        , case 
+            when address is not null and zipcode is not null 
+            then {{ dbt_utils.generate_surrogate_key(['address', 'zipcode']) }} 
+            else null 
+          end as id_location
         , building_name
         , {{ dbt_utils.generate_surrogate_key(['buildingtype']) }} as id_building_type
         , property_gfa_buildings

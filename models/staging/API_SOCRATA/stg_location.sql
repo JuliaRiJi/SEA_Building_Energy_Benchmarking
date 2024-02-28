@@ -7,18 +7,9 @@
 
 with src_location as (
     select
-        case 
-            when address is null or trim(address) = '' then null 
-            else address
-        end as address::varchar(100),
-        case 
-            when city is null or trim(city) = '' then null 
-            else city
-        end as city::varchar(100),
-        case 
-            when state is null or trim(state) = '' then null 
-            else state
-        end as state::varchar(100),
+        address::varchar(100) as address,
+        city::varchar(100) as city,
+        state::varchar(100) as state,
         case 
             when zipcode is null then null 
             else zipcode::int
@@ -31,20 +22,21 @@ with src_location as (
             when longitude is null then null 
             else longitude::float 
         end as longitude,
-        case 
-            when neighborhood is null or trim(neighborhood) = '' then null 
-            else neighborhood
-        end as neighborhood::varchar(100),
+        neighborhood::varchar(100) as neighborhood,
         case 
             when councildistrictcode is null then null 
-            else councildistrictcode 
+            else councildistrictcode::int 
         end as council_district_code
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
 ),
 
 stg_location as (
     select
-        {{ dbt_utils.generate_surrogate_key(['address', 'zipcode']) }} as id_location,
+        case 
+            when address is not null and zipcode is not null 
+            then {{ dbt_utils.generate_surrogate_key(['address', 'zipcode']) }} 
+            else null 
+        end as id_location,
         address,
         city,
         state,
