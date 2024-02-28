@@ -14,7 +14,7 @@
 with src_property_use_ranking as (
 
     select
-        datayear as data_year,
+        datayear::date as data_year,
         case
             when taxparcelidentificationnumber is null 
             then null
@@ -33,7 +33,7 @@ with src_property_use_ranking as (
     union all
 
     select
-        datayear as data_year,
+        datayear::date as data_year,
         case
             when taxparcelidentificationnumber is null 
             then null
@@ -71,7 +71,7 @@ with src_property_use_ranking as (
 
 stg_property_use_ranking as (
     select 
-        data_year,
+        {{ dbt_utils.generate_surrogate_key(['data_year']) }} as id_data_year,
         {{ dbt_utils.generate_surrogate_key(['id_property']) }} as id_property,
         {{ dbt_utils.generate_surrogate_key(['property_use_type']) }} as id_property_use_type,
         property_use_ranking,

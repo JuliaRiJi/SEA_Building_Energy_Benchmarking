@@ -47,6 +47,7 @@ stg_property as (
     select
         {{ dbt_utils.generate_surrogate_key(['id_property']) }} as id_property,
         tax_parcel_identification_number,
+        data_year,
         property_name::varchar(100) as property_name,
         epa_property_type::varchar(100) as epa_property_type,
         primary_property_type::varchar(100) as primary_property_type,

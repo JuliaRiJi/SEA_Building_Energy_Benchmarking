@@ -58,6 +58,7 @@ stg_building as (
         , {{ dbt_utils.generate_surrogate_key(['building_type']) }} as id_building_type
         , number_of_floors
         , year_built
+        , {{ dbt_utils.generate_surrogate_key(['data_year']) }} as id_data_year
         , total_ghg_emissions
         , ghg_emissions_intensity
         , energy_star_score

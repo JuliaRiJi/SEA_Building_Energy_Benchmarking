@@ -49,7 +49,7 @@ stg_building_energy_type as (
     select
         id_building,
         id_energy_type,
-        data_year,
+        {{ dbt_utils.generate_surrogate_key(['data_year']) }} as id_data_year,
         kbtu_value
     from electricity_cte
     
@@ -58,7 +58,7 @@ stg_building_energy_type as (
     select
         id_building,
         id_energy_type,
-        data_year,
+        {{ dbt_utils.generate_surrogate_key(['data_year']) }} as id_data_year,
         kbtu_value
     from natural_gas_cte
     

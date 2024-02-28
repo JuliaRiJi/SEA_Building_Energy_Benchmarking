@@ -39,7 +39,7 @@ stg_building_energy_intensity as (
     select
         id_building,
         id_energy_use_intensity,
-        {{ dbt_utils.generate_surrogate_key(['data_year']) }},
+        {{ dbt_utils.generate_surrogate_key(['data_year']) }} as id_data_year,
         kbtu_value,
         kbtu_value_wn
     from site_energy_cte
@@ -49,7 +49,7 @@ stg_building_energy_intensity as (
     select
         id_building,
         id_energy_use_intensity,
-        {{ dbt_utils.generate_surrogate_key(['data_year']) }},
+        {{ dbt_utils.generate_surrogate_key(['data_year']) }} as id_data_year,
         kbtu_value,
         kbtu_value_wn
     from source_energy_cte

@@ -60,11 +60,9 @@ models:
         - name: site_energy_use_kbtu
           data_type: numeric
           description: "Site energy use in kBTU"
-          tests:
         - name: site_energy_use_wn_kbtu
           data_type: numeric
           description: "Site energy use in WN kBTU"
-          tests:
         - name: compliance_status
           data_type: text
           description: "Compliance status"

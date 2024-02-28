@@ -11,15 +11,12 @@
   )
 }}
 
-with building_energy as (
+with fct_building_energy as (
     select
           b.id_building
         , b.id_building_type
         , b.id_property
-        , bei.id_energy_use_intensity as id_site_energy_intensity
-        , bei.kbtu_value as site_kbtu_value
-        , bei.kbtu_value_wn as site_kbtu_value_wn
-
+        , b.id_data_year
         , b.total_ghg_emissions
         , b.ghg_emissions_intensity
         , b.energy_star_score
@@ -27,23 +24,24 @@ with building_energy as (
         , b.site_energy_use_wn_kbtu
         , b.compliance_status
         , b.compliance_issue
+        , b.id_location
+        , bei.id_site_energy_intensity
+        , bei.site_kbtu_value
+        , bei.site_kbtu_value_wn
+        , bei.id_source_energy_intensity
+        , bei.source_kbtu_value
+        , bei.source_kbtu_value_wn
+        , bet.id_energy_electricity
+        , bet.id_energy_steam
+        , bet.id_energy_natural_gas
+        , bet.electricity_kbtu
+        , bet.steam_kbtu
+        , bet.natural_gas_kbtu
     from {{ ref('stg_building') }} b
-    join {{ ref('stg_building_type') }} bt
-    on b.id_building_type = bt.id_building_type
-    join {{ ref('stg_property') }} p 
-    on b.id_property=p.id_property
-    join {{ ref('stg_building_energy_intensity') }} bei
-    on b.id_building=bei.id_building
-    where bei.energy_source = 'site'
-
-    union
-    
-    select
-          bei.id_energy_use_intensity as id_source_energy_intensity
-        , bei.kbtu_value as source_kbtu_value
-        , bei.kbtu_value_wn as source_kbtu_value_wn
-    from {{ ref('stg_building') }} b
-    join {{ ref('stg_building_energy_intensity') }} bei
-    on b.id_building=bei.id_building
-    where bei.energy_source = 'source'
+    left join {{ ref('int_building_energy_intensity') }} bei
+    on b.id_building = bei.id_building and b.id_data_year = bei.id_data_year
+    left join {{ ref('int_building_energy_intensity') }} bet
+    on b.id_building = bet.id_building and b.id_data_year = bet.id_data_year
 )
+
+select * from fct_building_energy
