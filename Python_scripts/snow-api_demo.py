@@ -33,7 +33,7 @@ app_token = "1hm0BsBO9WQQkqPoWSHPWqRNR"
 client = Socrata("data.seattle.gov", app_token)
 
 # Identificador del dataset de Socrata para Building_Energy_Benchmarking
-#dataset_id = "5sxi-iyiy" # Dataset de 2022
+dataset_id = "5sxi-iyiy" # Dataset de 2022
 #dataset_id = "bfsh-nrm6"  # Dataset de 2021
 #dataset_id = "auez-gz8p"  # Dataset de 2020
 #dataset_id = "3th6-ticf"  # Dataset de 2019
@@ -48,6 +48,9 @@ Building_Energy_Benchmarking_df = pd.DataFrame.from_records(results)
 
 # Reemplazar NaN con None en el DataFrame
 Building_Energy_Benchmarking_df = Building_Energy_Benchmarking_df.where(pd.notnull(Building_Energy_Benchmarking_df), None)
+
+# Seleccionar solo los primeros 10 registros del DataFrame para la demo
+Building_Energy_Benchmarking_df_subset = Building_Energy_Benchmarking_df.head(10)
 
 #CONEXIÓN A SNOWFLAKE
 # Configuración de parámetros de conexión en Snowflake
@@ -66,7 +69,7 @@ conn = snowflake.connector.connect(**snowflake_config)
 
 #INGESTA DE DATOS DESDE API A SNOWFLAKE
 # Definir el nombre de la tabla
-table_name = 'Building_Energy_Benchmarking'
+table_name = 'Building_Energy_Benchmarking_demo'
 
 # Verificar si la tabla ya existe en Snowflake
 cursor = conn.cursor()
@@ -77,33 +80,33 @@ if cursor.fetchone():
     existing_columns = [col[2].lower() for col in cursor.fetchall()]
 
     # Comparar las columnas del DataFrame con las columnas existentes en la tabla de Snowflake
-    new_columns = [col for col in Building_Energy_Benchmarking_df.columns if col.lower() not in existing_columns]
+    new_columns = [col for col in Building_Energy_Benchmarking_df_subset.columns if col.lower() not in existing_columns]
 
     if new_columns:
         # Si hay nuevas columnas en el DataFrame, se agregan a la tabla de Snowflake
         for new_column in new_columns:
-            dtype = Building_Energy_Benchmarking_df[new_column].dtype
+            dtype = Building_Energy_Benchmarking_df_subset[new_column].dtype
             if dtype == 'object':
                 data_type = 'VARCHAR(100)'  # Para columnas de tipo objeto (cadenas de caracteres)
             else:
                 data_type = 'NUMBER'  # Para columnas numéricas
             cursor.execute(f"ALTER TABLE {table_name} ADD COLUMN {new_column} {data_type}")
             # Insertar registros correspondientes a las nuevas columnas
-            for index, row in Building_Energy_Benchmarking_df.iterrows():
-                insert_data_sql = f"INSERT INTO {table_name} ({', '.join(Building_Energy_Benchmarking_df.columns)}) VALUES ({', '.join(['%s'] * len(Building_Energy_Benchmarking_df.columns))})"
+            for index, row in Building_Energy_Benchmarking_df_subset.iterrows():
+                insert_data_sql = f"INSERT INTO {table_name} ({', '.join(Building_Energy_Benchmarking_df_subset.columns)}) VALUES ({', '.join(['%s'] * len(Building_Energy_Benchmarking_df_subset.columns))})"
                 cursor.execute(insert_data_sql, tuple(row))
     else:
-        for index, row in Building_Energy_Benchmarking_df.iterrows():
-            insert_data_sql = f"INSERT INTO {table_name} ({', '.join(Building_Energy_Benchmarking_df.columns)}) VALUES ({', '.join(['%s'] * len(Building_Energy_Benchmarking_df.columns))})"
+        for index, row in Building_Energy_Benchmarking_df_subset.iterrows():
+            insert_data_sql = f"INSERT INTO {table_name} ({', '.join(Building_Energy_Benchmarking_df_subset.columns)}) VALUES ({', '.join(['%s'] * len(Building_Energy_Benchmarking_df_subset.columns))})"
             cursor.execute(insert_data_sql, tuple(row))
 
         conn.commit()  # Confirmar la inserción de datos
 else:
     # La tabla no existe, crearla basada en las columnas del DataFrame
     create_table_sql = f"CREATE TABLE {table_name} ("
-    for column in Building_Energy_Benchmarking_df.columns:
+    for column in Building_Energy_Benchmarking_df_subset.columns:
         # Determinar el tipo de datos de la columna en función del tipo en el DataFrame
-        dtype = Building_Energy_Benchmarking_df[column].dtype
+        dtype = Building_Energy_Benchmarking_df_subset[column].dtype
         if dtype == 'object':
             data_type = 'VARCHAR(100)'  # Para columnas de tipo objeto (cadenas de caracteres)
         else:
@@ -112,8 +115,8 @@ else:
     create_table_sql = create_table_sql.rstrip(', ') + ")"
     cursor.execute(create_table_sql)
     # Insertar datos en la nueva tabla
-    for index, row in Building_Energy_Benchmarking_df.iterrows():
-        insert_data_sql = f"INSERT INTO {table_name} ({', '.join(Building_Energy_Benchmarking_df.columns)}) VALUES ({', '.join(['%s'] * len(Building_Energy_Benchmarking_df.columns))})"
+    for index, row in Building_Energy_Benchmarking_df_subset.iterrows():
+        insert_data_sql = f"INSERT INTO {table_name} ({', '.join(Building_Energy_Benchmarking_df_subset.columns)}) VALUES ({', '.join(['%s'] * len(Building_Energy_Benchmarking_df_subset.columns))})"
         cursor.execute(insert_data_sql, tuple(row))
 
     conn.commit()  # Confirmar la inserción de datos

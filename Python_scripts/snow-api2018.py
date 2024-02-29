@@ -74,7 +74,7 @@ Building_Energy_Benchmarking_df = Building_Energy_Benchmarking_df.where(pd.notnu
 # Configuración de parámetros de conexión en Snowflake
 snowflake_config = {
     'user': 'JULIARI',
-    'password': '*********',
+    'password': 'Mipelusa2012!',
     'account': 'yfuthya-ig52821',
     'warehouse': 'COMPUTE_WH',
     'database': 'BRONZE_DB',
@@ -96,11 +96,9 @@ if cursor.fetchone():
     # La tabla ya existe en Snowflake
     cursor.execute(f"SHOW COLUMNS IN {table_name}")
     existing_columns = [col[2].lower() for col in cursor.fetchall()]
-    print(existing_columns)
 
     # Comparar las columnas del DataFrame con las columnas existentes en la tabla de Snowflake
     new_columns = [col for col in Building_Energy_Benchmarking_df.columns if col.lower() not in existing_columns]
-    print(new_columns)
 
     if new_columns:
         # Si hay nuevas columnas en el DataFrame, se agregan a la tabla de Snowflake
