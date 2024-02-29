@@ -56,7 +56,7 @@ Building_Energy_Benchmarking_df_subset = Building_Energy_Benchmarking_df.head(10
 # Configuración de parámetros de conexión en Snowflake
 snowflake_config = {
     'user': 'JULIARI',
-    'password': 'Mipelusa2012!',
+    'password': '*****',
     'account': 'yfuthya-ig52821',
     'warehouse': 'COMPUTE_WH',
     'database': 'BRONZE_DB',
