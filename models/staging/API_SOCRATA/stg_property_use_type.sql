@@ -70,6 +70,11 @@ with distinct_property_types as (
     from {{ source('api_socrata', 'building_energy_benchmarking') }},
     lateral split_to_table(listofallpropertyusetypes, ',') as split
     where split.value is not null and trim(split.value) <> ''
+
+    union all
+    -- Nuevo registro para campos "unknown"
+    select
+        'unknown' as property_use_type
 ),
 
 stg_property_use_type as (

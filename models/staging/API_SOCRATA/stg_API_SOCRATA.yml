@@ -20,16 +20,23 @@ models:
           description: "Unique identifier for property"
           tests:
             - dbt_utils.not_empty_string
+            - relationships:
+                to: ref('stg_property')
+                field: id_property
         - name: tax_parcel_identification_number
           data_type: text
           description: "Tax parcel identification number"
           tests:
               - dbt_utils.not_empty_string
+              - positive_values
         - name: id_location
           data_type: text
           description: "Unique identifier for location"
           tests:
               - dbt_utils.not_empty_string
+              - relationships:
+                  to: ref('stg_location')
+                  field: id_location
         - name: building_name
           data_type: text
           description: "Name of the building"
@@ -39,30 +46,39 @@ models:
           data_type: text
           tests:
               - dbt_utils.not_empty_string
-        - name: property_gfa_buildings
-          data_type: numeric
-          description: "Property GFA (Gross Floor Area) for buildings"
         - name: number_of_floors
           data_type: numeric
           description: "Number of floors"
+          tests:
+              - positive_values
         - name: year_built
           data_type: date
           description: "Year the building was built"
         - name: total_ghg_emissions
           data_type: numeric
           description: "Total greenhouse gas emissions"
+          tests:
+              - positive_values
         - name: ghg_emissions_intensity
           data_type: numeric
           description: "Greenhouse gas emissions intensity"
+          tests:
+              - positive_values
         - name: energy_star_score
           data_type: numeric
           description: "Energy star score"
+          tests:
+              - positive_values
         - name: site_energy_use_kbtu
           data_type: numeric
           description: "Site energy use in kBTU"
+          tests:
+              - positive_values
         - name: site_energy_use_wn_kbtu
           data_type: numeric
           description: "Site energy use in WN kBTU"
+          tests:
+              - positive_values
         - name: compliance_status
           data_type: text
           description: "Compliance status"
@@ -101,12 +117,14 @@ models:
             tests:
               - not_null
               - dbt_utils.not_empty_string
+              - positive_values
           - name: kbtu_value_wn
             data_type: text
             description: "KBTU value in WN"
             tests:
               - not_null
               - dbt_utils.not_empty_string
+              - positive_values
 
   - name: stg_building_energy_type
     description: "stg_building_energy_type table description"
@@ -137,6 +155,7 @@ models:
             tests:
               - not_null
               - dbt_utils.not_empty_string
+              - positive_values
 
   - name: stg_building_type
     description: "stg_building_type table description"
@@ -174,7 +193,7 @@ models:
 
 
   - name: stg_energy_use_intensity
-    description: "STG_ENERGY_USE_INTENSITY table description"
+    description: "stg_energy_use_intensity table description"
     columns:
           - name: id_energy_use_intensity
             data_type: text
@@ -197,7 +216,7 @@ models:
               - dbt_utils.not_empty_string
 
   - name: stg_location
-    description: "STG_LOCATION table description"
+    description: "stg_location table description"
     columns:
           - name: id_location
             data_type: text
@@ -219,16 +238,17 @@ models:
               - not_null
               - dbt_utils.not_empty_string
           - name: state
-            data_type: text
+            data_type: varchar
             description: "State"
             tests:
               - not_null
               - dbt_utils.not_empty_string
           - name: zipcode
-            data_type: numeric(38,0)
+            data_type: numeric
             description: "Zipcode"
             tests:
               - not_null
+              - positive_values
           - name: latitude
             data_type: float
             description: "Latitude"
@@ -240,70 +260,80 @@ models:
             tests:
               - not_null
           - name: neighborhood
-            data_type: text
+            data_type: varchar
             description: "Neighborhood"
             tests:
               - not_null
           - name: council_district_code
-            data_type: numeric(38,0)
+            data_type: numeric
             description: "Council district code"
             tests:
               - not_null
+              - positive_values
 
   - name: stg_property
     description: "stg_property table description"
     columns:
           - name: id_property
-            data_type: varchar(32)
+            data_type: varchar
             tests:
               - not_null
               - dbt_utils.not_empty_string
               - unique
           - name: tax_parcel_identification_number
-            data_type: text
+            data_type: varchar
             description: "Tax parcel identification number"
             tests:
               - not_null
               - dbt_utils.not_empty_string
+              - positive_values
           - name: property_name
-            data_type: text
+            data_type: varchar
             description: "Property name"
             tests:
               - not_null
               - dbt_utils.not_empty_string
           - name: epa_property_type
-            data_type: text
+            data_type: varchar
             description: "EPA property type"
             tests:
               - not_null
               - dbt_utils.not_empty_string
           - name: primary_property_type
-            data_type: text
+            data_type: varchar
             description: "Primary property type"
             tests:
               - not_null
               - dbt_utils.not_empty_string
           - name: epa_building_sub_type_name
-            data_type: text
+            data_type: varchar
             description: "EPA building sub type name"
             tests:
               - not_null
               - dbt_utils.not_empty_string
           - name: number_of_buildings
-            data_type: numeric(38,0)
+            data_type: numeric
             description: "Number of buildings"
             tests:
               - not_null
+              - positive_values
           - name: property_gfa_total
-            data_type: numeric(38,0)
+            data_type: numeric
             description: "Total property GFA (Gross Floor Area)"
             tests:
               - not_null
+              - positive_values
           - name: property_gfa_parking
-            data_type: numeric(38,0)
+            data_type: numeric
             description: "Property GFA for parking"
             tests:
               - not_null
+              - positive_values
+          - name: property_gfa_buildings
+            data_type: numeric
+            description: "Property GFA (Gross Floor Area) for buildings"
+            tests:
+              - positive_values
 
   - name: stg_property_use_ranking
     description: "stg_property_use_ranking table description"
@@ -314,30 +344,30 @@ models:
             tests:
               - not_null
               - dbt_utils.not_empty_string
-          - name: tax_parcel_identification_number
-            data_type: text
-            description: "Tax parcel identification number"
-            tests:
-              - not_null
-              - dbt_utils.not_empty_string
           - name: id_property
-            data_type: varchar(32)
+            data_type: varchar
             tests:
               - not_null
               - dbt_utils.not_empty_string
+              - relationships:
+                  to: ref('stg_property')
+                  field: id_property
           - name: largest_property_use_type
-            data_type: text
+            data_type: varchar
             description: "Largest property use type"
             tests:
               - not_null
               - dbt_utils.not_empty_string
           - name: id_property_use_type
-            data_type: varchar(32)
+            data_type: varchar
             tests:
               - not_null
               - dbt_utils.not_empty_string
+              - relationships:
+                  to: ref('stg_property_use_type')
+                  field: id_property_use_type     
           - name: property_use_ranking
-            data_type: numeric(1,0)
+            data_type: numeric
             description: "Property use ranking"
             tests:
               - not_null
@@ -347,18 +377,19 @@ models:
             tests:
               - not_null
               - dbt_utils.not_empty_string
+              - positive_values
 
   - name: stg_property_use_type
     description: "stg_property_use_type table description"
     columns:
           - name: id_property_use_type
-            data_type: varchar(32)
+            data_type: varchar
             tests:
               - not_null
               - dbt_utils.not_empty_string
               - unique
           - name: property_use_type
-            data_type: text
+            data_type: varchar
             description: "Property use type"
             tests:
               - not_null

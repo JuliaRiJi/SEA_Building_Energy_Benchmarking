@@ -20,7 +20,7 @@ with src_building as (
             else taxparcelidentificationnumber
           end as id_property
         , taxparcelidentificationnumber::varchar(100) as tax_parcel_identification_number
-        , datayear::date as data_year
+        , datayear::int as data_year
         , buildingname::varchar(100) as building_name
         , buildingtype::varchar(100) as building_type
         , address::varchar(100) as address
@@ -42,7 +42,12 @@ with src_building as (
         , compliancestatus::varchar(100) as compliance_status
         , complianceissue::varchar(100) as compliance_issue
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
-    ),
+    where
+    zipcode >= 0
+    and site_energy_use_kbtu >= 0
+    and site_energy_use_wn_kbtu >= 0
+    and energy_star_score >= 0
+),
 
 stg_building as (
     select
@@ -59,6 +64,7 @@ stg_building as (
         , number_of_floors
         , year_built
         , {{ dbt_utils.generate_surrogate_key(['data_year']) }} as id_data_year
+        , data_year
         , total_ghg_emissions
         , ghg_emissions_intensity
         , energy_star_score

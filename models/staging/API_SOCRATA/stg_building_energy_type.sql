@@ -20,6 +20,7 @@ with electricity_cte as (
         , datayear as data_year
         , electricity_kbtu as kbtu_value
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
+    where electricity_kbtu >= 0
 ),
 
 -- CTE para la energía de gas natural
@@ -30,7 +31,8 @@ natural_gas_cte as (
         , {{ dbt_utils.generate_surrogate_key(['energy_type']) }} as id_energy_type
         , datayear as data_year
         , naturalgas_kbtu as kbtu_value
-    from {{ source('api_socrata', 'building_energy_benchmarking') }}
+    from {{ source('api_socrata', 'building_energy_benchmarking') }}    
+    where naturalgas_kbtu >= 0
 ),
 
 -- CTE para la energía de vapor
@@ -42,6 +44,7 @@ steam_cte as (
         , datayear as data_year
         , steamuse_kbtu as kbtu_value
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
+    where steamuse_kbtu >= 0
 ),
 
 -- Unión de todos los tipos de energía y selección de los campos deseados

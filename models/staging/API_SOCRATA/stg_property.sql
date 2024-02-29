@@ -41,6 +41,11 @@ with src_property as (
         , propertygfatotal::float as property_gfa_total
         , propertygfaparking::float as property_gfa_parking
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
+    where 
+        numberofbuildings >= 0 
+        and propertygfabuilding_s >= 0 
+        and propertygfatotal >= 0 
+        and propertygfaparking >= 0
 ),
 
 stg_property as (

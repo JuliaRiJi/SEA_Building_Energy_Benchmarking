@@ -34,6 +34,8 @@ with src_location as (
             else councildistrictcode::int 
         end as council_district_code
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
+    where zipcode >= 0
+    and councildistrictcode >= 0
 ),
 
 stg_location as (

@@ -21,6 +21,7 @@ with site_energy_cte as (
         siteeui_kbtu_sf as kbtu_value,
         siteeuiwn_kbtu_sf as kbtu_value_wn
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
+    where siteeui_kbtu_sf >= 0 and siteeuiwn_kbtu_sf >= 0
 ),
 
 -- CTE for "source" energy
@@ -33,6 +34,7 @@ source_energy_cte as (
         sourceeui_kbtu_sf as kbtu_value,
         sourceeuiwn_kbtu_sf as kbtu_value_wn
     from {{ source('api_socrata', 'building_energy_benchmarking') }}
+    where sourceeui_kbtu_sf >= 0 and sourceeuiwn_kbtu_sf >= 0
 ),
 
 stg_building_energy_intensity as (
