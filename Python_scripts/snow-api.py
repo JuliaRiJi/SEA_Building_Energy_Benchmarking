@@ -53,7 +53,7 @@ Building_Energy_Benchmarking_df = Building_Energy_Benchmarking_df.where(pd.notnu
 # Configuración de parámetros de conexión en Snowflake
 snowflake_config = {
     'user': 'JULIARI',
-    'password': 'Mipelusa2012!',
+    'password': '**********',
     'account': 'yfuthya-ig52821',
     'warehouse': 'COMPUTE_WH',
     'database': 'BRONZE_DB',
